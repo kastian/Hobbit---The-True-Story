@@ -38,9 +38,9 @@ Sample sentences that the parser will recognize:
 
 `get the chest`
 
-`ask gandalf about the spell
+`ask gandalf about the spell`
 
-`talk to thorin about chest
+`talk to thorin about chest`
 
 `examine chest`
 
