@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# hobbit - BASH port of old MS-DOS adventure
+
 # Copyright 1993, 2001 Fredrik Ramsberg, Johan Berntsson
 # Copyright 2015 Konstantin Shakhnov
 
@@ -29,6 +31,13 @@
 
 ########################################################################
 
+# v.1.0.1
+#	Rename variables to more understangable names
+#	Merge some alias functions to originasl
+#	Add real quit.
+# v.1.0
+#	Original code fully ported to BASH
+
 ask() {
     if [[ "$3" == "the" ]]; then
 	ask $1 $2 $4
@@ -40,7 +49,7 @@ ask() {
 }
 
 clue() {
-    if [[ "$hbr" == "clearing" ]]; then
+    if [[ "$current_place" == "clearing" ]]; then
 	echo "Trolls are not known to stand sunlight very well. It may be wise to wait a"
 	echo "while before confronting them."
     else
@@ -54,71 +63,70 @@ cut() {
 	    cut $2
 	    ;;
 	"cigar" )
-	    if [[ "$hbr" != "den" ]]; then
+	    if [[ "$current_place" != "den" ]]; then
 		echo "There are no cigars around."
-	    elif [[ "$hb6" != "me" ]]; then
+	    elif [[ "$sword" != "me" ]]; then
 		echo "You havn't got anything to cut with."
 	    else
 		echo "You run towards the mighty dragon and cut off his cigar. The dragon:"
 		echo "exclaims, \"Hey, what are you doing!\". You explain that the cigar will"
 		echo "be easier to smoke now, and after some experimenting, Smaug agrees with you."
 		echo "He trades your sword for a treasure and offers you transport to Rivendell."
-		hb7="me"
-		hbr="rivendell"
-		hb6="den"
+		treasure="me"
+		current_place="rivendell"
+		sword="den"
 		echo ""
 		read -sn 1 # pause
 		look
 	    fi
 	    ;;
-	"dragon" | "gandalf" | "thorin" | "elrond" | "troll" | "trolls" )
-	    kill $1
+	"smaug" | "dragon" | "gandalf" | "thorin" | "elrond" | "troll" | "trolls" | "naked" | "woman" )
+	    kill
 	    ;;
 	* )
 	    echo "You can't cut that!"
     esac
 }
 
-
 drop() {
     case "$1" in
 	"torch" )
-	    if [[ "$hb1" != "me" ]]; then
+	    if [[ "$torch" != "me" ]]; then
 		echo "You are not holding that."
 	    else
-		hb1="$hbr"
+		torch="$current_place"
 		echo "You drop the $1."
 	    fi
 	    ;;
 	"lunch" )
-	    if [[ "$hb2" != "me" ]]; then
+	    if [[ "$lunch" != "me" ]]; then
 		echo "You are not holding that."
 	    else
-		hb2="$hbr"
+		lunch="$current_place"
 		echo "You drop the $1."
 	    fi
 	    ;;
 	"map" )
-	    if [[ "$hb3" != "me" ]]; then
+	    if [[ "$map" != "me" ]]; then
 		echo "You are not holding that."
 	    else
-		hb3="$hbr"
+		map="$current_place"
 		echo "You drop the $1."
 	    fi
 	    ;;
 	"sword" )
-	    if [[ "$hb6" != "me" ]]; then
+	    if [[ "$sword" != "me" ]]; then
 		echo "You are not holding that."
 	    else
-		hb6="$hbr"
+		sword="$current_place"
 		echo "You drop the $1."
 	    fi
 	    ;;
 	"treasure" )
-	    if [[ "$hb7" != "me" ]]; then
+	    if [[ "$treasure" != "me" ]]; then
 		echo "You are not holding that."
 	    else
-		hb7="$hbr"
+		treasure="$current_place"
 		echo "You drop the $1."
 	    fi
 	    ;;
@@ -136,11 +144,11 @@ eat() {
 	    eat $2
 	    ;;
 	"lunch" )
-	    if [[ "$hb2" != "me" ]]; then
+	    if [[ "$lunch" != "me" ]]; then
 		echo "But you don't have any lunch!"
 	    else
 		echo "You feel much refreshed."
-		hb2="nil"
+		lunch="nil"
 	    fi
 	    ;;
 	"" )
@@ -164,23 +172,23 @@ examine() {
 	"" ) look
 	     ;;
 	"torch" )
-	    if [[ "$hb1" != "me" && "$hb1" != "$hbr" ]]; then
+	    if [[ "$torch" != "me" && "$torch" != "$current_place" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "It is currently providing light."
 	    fi
 	    ;;
 	"lunch" )
-	    if [[ "$hb2" != "me" && "$hb2" != "$hbr" ]]; then
+	    if [[ "$lunch" != "me" && "$lunch" != "$current_place" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "It's edible."
 	    fi
 	    ;;
 	"map" )
-	    if [[ "$hb3" == "gandalf" && "$hbr" == "home" ]]; then
+	    if [[ "$map" == "gandalf" && "$current_place" == "home" ]]; then
 		echo "Gandalf has it. You should ask him about it. Maybe he doesn't need it anyway."
-	    elif [[ "$hb3" != "me" && "$hb3" != "$hbr" ]]; then
+	    elif [[ "$map" != "me" && "$map" != "$current_place" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "The curious map must obviously have been drawn by hand, at great effort. "
@@ -188,18 +196,18 @@ examine() {
 	    fi
 	    ;;
 	"chest" )
-	    if [[ "$hbr" != "home" ]]; then
+	    if [[ "$current_place" != "home" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "It's a nice piece of wooden workmanship."
-		if [[ "$hb1" == "chest" ]]; then
+		if [[ "$torch" == "chest" ]]; then
 		    echo "There's a burning torch inside it. You decide to pick it up."
-		    hb1="me"
+		    torch="me"
 		fi
 	    fi
 	    ;;
 	"elrond" )
-	    if [[ "$hbr" != "rivendell" ]]; then
+	    if [[ "$current_place" != "rivendell" ]]; then
 		echo "Elrond isn't here!"
 	    else
 		echo "Elrond has turned pretty nasty lately. Better not mess with him, considering"
@@ -207,17 +215,17 @@ examine() {
 	    fi
 	    ;;
 	"gandalf" )
-	    if [[ "$hbr" != "home" ]]; then
+	    if [[ "$current_place" != "home" ]]; then
 		echo "Gandalf isn't here!"
 	    else
 		echo "Gandalf, the old magician, is still working with his new spell."
-		if [[ "$hb3" == "gandalf" ]]; then
+		if [[ "$map" == "gandalf" ]]; then
 		    echo "He is carrying a map."
 		fi
 	    fi
 	    ;;
 	"spell" )
-	    if [[ "$hbr" != "home" ]]; then
+	    if [[ "$current_place" != "home" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "It's a piece of beautiful yellowed paper, with magical symbols arranged"
@@ -228,7 +236,7 @@ examine() {
 	    echo "Thorin, your old friend, is no longer the proud dwarf he once was. All the"
 	    echo "drugs have turned him into a drooling good-for-nothing idiot. The only reason"
 	    echo "that he has come along is to get more treasures for drugs, as always."
-	    case "$hbr" in
+	    case "$current_place" in
 		"home" )
 		    echo "He doesn't seem too happy about leaving the house."
 		    ;;
@@ -237,18 +245,16 @@ examine() {
 		    ;;
 		"den" )
 		    echo "Thorin is negotiating with the dragon about taking some rare drugs home,"
-		    ;;
-		"den" )
 		    echo "provided that Smaug gets to keep your body."
 		    ;;
 		"woods" )
 		    echo "Thorin says \"We're lost! Abandon all hope. We'll never get out of here alive!\"."
 		    ;;
 		"clearing")
-		    if [[ "$hbs" == "NO" ]]; then
-			echo "Thorin participates in the chanting."
-		    else
+		    if [[ "$trolls_are_stoned" ]]; then
 			echo "Thorin is talking to the trolls. He doesn't notice that they are dead. "
+		    else
+			echo "Thorin participates in the chanting."
 		    fi
 		    ;;
 		"cave" )
@@ -257,7 +263,7 @@ examine() {
 		esac
 	    ;;
 	"naked" | "woman" )
-	    if [[ "$hbr" != "foul" ]]; then
+	    if [[ "$current_place" != "foul" ]]; then
 		echo" She is nowhere to be seen."
 	    else
 		echo "She looks cold and tired, and pretty far from sensual. As you peek at her,"
@@ -266,7 +272,7 @@ examine() {
 	    fi
 	    ;;
 	"smaug" | "dragon" )
-	    if [[ "$hbr" != "den" ]]; then
+	    if [[ "$current_place" != "den" ]]; then
 		echo "Smaug is not around, as far as I can see."
 	    else
 		echo "Smaug's red dragon body is filling the eastern part of the cave. As he can't"
@@ -278,7 +284,7 @@ examine() {
 	    fi
 	    ;;
 	"treasure" )
-	    if [[ "$hb7" != "me" && "$hb7" != "$hbr" ]]; then
+	    if [[ "$treasure" != "me" && "$treasure" != "$current_place" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "It is just the kind of treasure you'd expect to find in a dragon's den. It does"
@@ -286,14 +292,14 @@ examine() {
 	    fi
 	    ;;
 	"painting" | "paintings" )
-	    if [[ "$hbr" != "den" ]]; then
+	    if [[ "$current_place" != "den" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "Among the paintings you recognize works of Picasso, da Vinci and Rembrandt. "
 	    fi
 	    ;;
 	"cigar" )
-	    if [[ "$hbr" != "den" ]]; then
+	    if [[ "$current_place" != "den" ]]; then
 		echo "It is nowhere to be seen."
 	    else
 		echo "The cigar doesn't seem to be properly cut."
@@ -302,19 +308,15 @@ examine() {
 	"the" )
 	    examine $2
 	    ;;
-	*)
+	* )
 	    echo "There is nothing special about the $1."
     esac
 }
 
-get() {
-    take $1 $2 $3
-}
-
 go() {
-    case "$hbr" in
+    case "$current_place" in
 	"woods" )
-	    if [[ "$1" == "raft" && "$hb5" == "woods" ]]; then
+	    if [[ "$1" == "raft" && "$raft" == "woods" ]]; then
 		echo "Not knowing what is about to happen, you fearlessly enter the raft. You follow"
 		echo "the river downstream for a while, as you don't have any means of manouvering"
 		echo "the little dingy. When hitting land, you are cold and starving. You soon find"
@@ -324,8 +326,8 @@ go() {
 		echo "as you step on a loose rock, which gives way. You slide down a long tunnel"
 		echo "which has many bends and little light. Eventually you leave the tunnel, only"
 		echo "to come into..."
-		hb5="nil"
-		hbr="den"
+		raft="nil"
+		current_place="den"
 		echo ""
 		read -sn 1 # pause
 		look
@@ -333,11 +335,11 @@ go() {
 		echo "from a side door, singing about peace. He greets you with a laugh."
 		return
 	    elif [[ "$1" == "south" ]]; then
-		hbr="woods"
+		current_place="woods"
 	    elif [[ "$1" == "west" ]]; then
-		hbr="foul"
+		current_place="foul"
 	    elif [[ "$1" == "north" ]]; then
-		hbr="rivendell"
+		current_place="rivendell"
 	    else
 		echo "You can't go $1."
 		return
@@ -348,12 +350,12 @@ go() {
 		echo "You can't go $1."
 		return
 	    else
-		hbr="woods"
+		current_place="woods"
 	    fi
 	    ;;
 	"cave" )
 	    if [[ "$1" == "south" ]]; then
-		hbr="clearing"
+		current_place="clearing"
 	    else
 		echo "You can't go $1."
 		return
@@ -361,17 +363,17 @@ go() {
 	    ;;
 	"clearing" )
 	    if [[ "$1" == "east" ]]; then
-		hbr="rivendell"
+		current_place="rivendell"
 	    elif [[ "$1" == "north" ]]; then
-		if [[ "$hbs" == "YES" ]]; then
-		    hbr="cave"
+		if [[ "$trolls_are_stoned" ]]; then
+		    current_place="cave"
 		else
 		    echo "The trolls won't let you."
 		    return
 		fi
 	    elif [[ "$1" == "west" ]]; then
-		hbr="home"
-		if [[ "$hb7" == "me" ]]; then
+		current_place="home"
+		if [[ "$treasure" == "me" ]]; then
 		    echo "You go west."
 		    look
 		    echo ""
@@ -394,7 +396,7 @@ go() {
 	    ;;
 	"home" )
 	    if [[ "$1" == "east" ]]; then
-		hbr="clearing"
+		current_place="clearing"
 	    else
 		echo "You can't go $1."
 		return
@@ -402,25 +404,25 @@ go() {
 	    ;;
 	"rivendell" )
 	    if [[ "$1" == "north" ]]; then
-		if [[ "$hb2" == "me" ]]; then
+		if [[ "$lunch" == "me" ]]; then
 		    echo "Just as you leave, Elrond grabs your lunch. He looks annoyed."
-		    hb2="rivendell"
+		    lunch="rivendell"
 		fi
-		if [[ "$hb3" == "me" ]]; then
+		if [[ "$map" == "me" ]]; then
 		    echo "Using the curious map that Gandalf gave you, you soon find your way to the"
 		    echo "pleasant lush of the woods."
-		    hbr="woods"
+		    current_place="woods"
 		else
 		    echo "You stagger off into the surrounding hills, but find nothing of interest."
 		    echo "Disappointed you return back to Elrond's party."
 		    return
 		fi
 	    elif [[ "$1" == "west" ]]; then
-		if [[ "$hb2" == "me" ]]; then
+		if [[ "$lunch" == "me" ]]; then
 		    echo "Just as you leave, Elrond grabs your lunch. He looks annoyed."
-		    hb2="rivendell"
+		    lunch="rivendell"
 		fi
-		hbr="clearing"
+		current_place="clearing"
 	    else
 		echo "You can't go $1."
 		return
@@ -454,25 +456,21 @@ go() {
     esac
 }
 
-hint() {
-    clue $1 $2
-}
-
 inventory() {
     echo "You are carrying:"
-    if [[ "$hb1" == "me" ]]; then
+    if [[ "$torch" == "me" ]]; then
 	echo " A Torch"
     fi
-    if [[ "$hb2" == "me" ]]; then
+    if [[ "$lunch" == "me" ]]; then
 	echo " Some Lunch"
     fi
-    if [[ "$hb3" == "me" ]]; then
+    if [[ "$map" == "me" ]]; then
 	echo " A Curious Map"
     fi
-    if [[ "$hb6" == "me" ]]; then
+    if [[ "$sword" == "me" ]]; then
 	echo " A Sword"
     fi
-    if [[ "$hb7" == "me" ]]; then
+    if [[ "$treasure" == "me" ]]; then
 	echo " A Treasure"
     fi
 }
@@ -481,13 +479,9 @@ kill() {
     echo "Violence is not very likely to solve your problems. Better stay calm."
 }
 
-load() {
-    restore $1 $2 $3 $4 $5
-}
-
 look() {
     echo ""
-    case "$hbr" in
+    case "$current_place" in
 	"woods" )
 	    echo "Deep Forest"
 	    echo "You are standing in the deep forest. Paths lead off in all directions but east,"
@@ -502,7 +496,7 @@ look() {
 	    ;;
 	"cave" )
 	    echo "Trolls' Cave"
-	    if [[ "$hb1" == "cavern" || "$hb1" == "me" ]]; then
+	    if [[ "$torch" == "cavern" || "$torch" == "me" ]]; then
 		echo "You are in a hardly even lit cavern with a doorway leading south."
 		echo "Thorin is mumbling to himself and fails to notice your presence."
 	    else
@@ -515,7 +509,7 @@ look() {
 	    echo "You are standing in a vast clearing, with paths leading off to the east and "
 	    echo "west. A yellow brick road leads north. Trolls are standing all around you,"
 	    echo "fiercely watching every move of your limbs."
-	    if [[ "$hbs" == "YES" ]]; then
+	    if [[ "$trolls_are_stoned" ]]; then
 		echo "The trolls seem to be stoned. They probably don't like the sunlight."
 	    else
 		echo "The trolls are chanting ancient rhymes. They tend to do that just before dawn."
@@ -536,7 +530,7 @@ look() {
 	    echo "Elrond hesitatingly offers you some food. He gives your fairly thick legs a"
 	    echo "greedy look. He drools."
 	    echo "Thorin announces: \"If you're attacking the Hobbits, count me in!\""
-	    hb2="me"
+	    lunch="me"
 	    ;;
 	"den" )
 	    echo "Smaug's Den"
@@ -549,15 +543,15 @@ look() {
     esac
 
     echo "You can see:"
-    case "$hbr" in
-	"$hb1" ) echo " A Torch" ;;
-	"$hb2" ) echo " Some Lunch" ;;
-	"$hb3" ) echo " A Curious Map" ;;
-	"home" ) echo " A Wooden Chest" ;;
-	"foul" ) echo " A Naked Dwarf Woman" ;;
-	"$hb5" ) echo " A Raft" ;;
-	"$hb6" ) echo " A Sword" ;;
-	"$hb7" ) echo " A Treasure" ;;
+    case "$current_place" in
+	"$torch"    ) echo " A Torch" ;;
+	"$lunch"    ) echo " Some Lunch" ;;
+	"$map"      ) echo " A Curious Map" ;;
+	"home"      ) echo " A Wooden Chest" ;;
+	"foul"      ) echo " A Naked Dwarf Woman" ;;
+	"$raft"     ) echo " A Raft" ;;
+	"$sword"    ) echo " A Sword" ;;
+	"$treasure" ) echo " A Treasure" ;;
     esac
     echo " Thorin, the dwarf."
 }
@@ -568,14 +562,14 @@ restart() {
     # rem ***             Updated in December 2001              ***
     # rem ***       Ported to BASH by Kastian in May 2015       ***
 
-    hbr="home"
-    hb1="chest"
-    hb2="rivendell"
-    hb3="gandalf"
-    hb5="woods"
-    hb6="cave"
-    hb7="den"
-    hbs="NO"
+    current_place="home"
+    torch="chest"
+    lunch="rivendell"
+    map="gandalf"
+    raft="woods"
+    sword="cave"
+    treasure="den"
+    trolls_are_stoned=""
 
     clear
     echo "      Hobbit - The True Story - redux, Director's Cut.      "
@@ -608,14 +602,14 @@ save() {
     elif [[ -f "HS${1}.BAT" ]]; then
 	echo "Error: A file called \"HS${1}.BAT\" already exists."
     else
-	echo "hb1=\"$hb1\"" >> "HS${1}.BAT"
-	echo "hb2=\"$hb2\"" >> "HS${1}.BAT"
-	echo "hb3=\"$hb3\"" >> "HS${1}.BAT"
-	echo "hb5=\"$hb5\"" >> "HS${1}.BAT"
-	echo "hb6=\"$hb6\"" >> "HS${1}.BAT"
-	echo "hb7=\"$hb7\"" >> "HS${1}.BAT"
-	echo "hbr=\"$hbr\"" >> "HS${1}.BAT"
-	echo "hbs=\"$hbs\"" >> "HS${1}.BAT"
+	echo "torch=\"$torch\"" >> "HS${1}.BAT"
+	echo "lunch=\"$lunch\"" >> "HS${1}.BAT"
+	echo "map=\"$map\"" >> "HS${1}.BAT"
+	echo "raft=\"$raft\"" >> "HS${1}.BAT"
+	echo "sword=\"$sword\"" >> "HS${1}.BAT"
+	echo "treasure=\"$treasure\"" >> "HS${1}.BAT"
+	echo "current_place=\"$current_place\"" >> "HS${1}.BAT"
+	echo "trolls_are_stoned=\"$trolls_are_stoned\"" >> "HS${1}.BAT"
 	echo "Game saved."
     fi
 }
@@ -638,66 +632,66 @@ show() {
 take() {
     case "$1" in
 	"torch" )
-	    if [[ "$hb1" == "me" ]]; then
+	    if [[ "$torch" == "me" ]]; then
 		echo "You are already carrying that."
-	    elif [[ "$hb1" != "$hbr" ]]; then
+	    elif [[ "$torch" != "$current_place" ]]; then
 		echo "You can't see it here."
 	    else
-		hb1="me"
+		torch="me"
 		echo "You take the $1."
 	    fi
 	    ;;
 	"lunch" )
-	    if [[ "$hb2" == "me" ]]; then
+	    if [[ "$lunch" == "me" ]]; then
 		echo "You are already carrying that."
-	    elif [[ "$hb2" != "$hbr" ]]; then
+	    elif [[ "$lunch" != "$current_place" ]]; then
 		echo "You can't see it here."
 	    else
-		hb2="me"
+		lunch="me"
 		echo "You take the $1."
 	    fi
 	    ;;
 	"map" )
-	    if [[ "$hb3" == "me" ]]; then
+	    if [[ "$map" == "me" ]]; then
 		echo "You are already carrying that."
-	    elif [[ "$hb3" != "$hbr" ]]; then
+	    elif [[ "$map" != "$current_place" ]]; then
 		echo "You can't see it here."
 	    else
-		hb3="me"
+		map="me"
 		echo "You take the $1."
 	    fi
 	    ;;
 	"chest" )
-	    if [[ "$hbr" != "home" ]]; then
+	    if [[ "$current_place" != "home" ]]; then
 		echo "You can't see it here."
 	    else
 		echo "You can't take that."
 	    fi
 	    ;;
 	"raft" )
-	    if [[ "$hb5" != "$hbr" ]]; then
+	    if [[ "$raft" != "$current_place" ]]; then
 		echo "You can't see it here."
 	    else
 		echo "You can't take that."
 	    fi
 	    ;;
 	"sword" )
-	    if [[ "$hb6" == "me" ]]; then
+	    if [[ "$sword" == "me" ]]; then
 		echo "You are already carrying that."
-	    elif [[ "$hb6" != "$hbr" ]]; then
+	    elif [[ "$sword" != "$current_place" ]]; then
 		echo "You can't see it here."
 	    else
-		hb6="me"
+		sword="me"
 		echo "You take the $1."
 	    fi
 	    ;;
 	"treasure" )
-	    if [[ "$hb7" == "me" ]]; then
+	    if [[ "$treasure" == "me" ]]; then
 		echo "You are already carrying that."
-	    elif [[ "$hb7" != "$hbr" ]]; then
+	    elif [[ "$treasure" != "$current_place" ]]; then
 		echo "You can't see it here."
 	    else
-		hb7="me"
+		treasure="me"
 		echo "You take the $1."
 	    fi
 	    ;;
@@ -734,15 +728,15 @@ talk() {
 talkhelp() {
     case "$1" in
 	"gandalf" )
-	    if [[ "$hbr" != "home" ]]; then
+	    if [[ "$current_place" != "home" ]]; then
 		echo "You can't see him here."
 	    elif [[ "$2" == "map" ]]; then
-		if [[ "$hb3" != "gandalf" ]]; then
+		if [[ "$map" != "gandalf" ]]; then
 		    echo "Gandalf yells, \"I already gave it to you, didn't I!!!\"."
 		else
 		    echo "\"Oh, that map. There is absolutely nothing special about it at all. I guess"
 		    echo "you could have it, if you want it.\", Gandalf declares and hands you the map. "
-		    hb3="me"
+		    map="me"
 		fi
 	    elif [[ "$2" == "spell" ]]; then
 		echo "\"This will be a great spell. I shall name it 'HOBOFF', no doubt.\", Gandalf"
@@ -762,10 +756,10 @@ talkhelp() {
 	    fi
 	    ;;
 	"elrond" )
-	    if [[ "$hbr" != "rivendell" ]]; then
+	    if [[ "$current_place" != "rivendell" ]]; then
 		echo "You can't see him here."
 	    elif [[ "$2" == "map" ]]; then
-		if [[ "$hb3" != "rivendell" && "$hb3" != "me" ]]; then
+		if [[ "$map" != "rivendell" && "$map" != "me" ]]; then
 		    echo "\"What map are you talking about, you little prat? You must be delirious!\","
 		    echo "Elrond snarls. He slaps you in the face."
 		else
@@ -782,7 +776,7 @@ talkhelp() {
 	    ;;
 	"thorin" )
 	    if [[ "$2" == "map" ]]; then
-		if [[ "$hb3" != "$hbr" &&  "$hb3" != "me" ]]; then
+		if [[ "$map" != "$current_place" &&  "$map" != "me" ]]; then
 		    echo "Thorin eyes you suspiciously. \"Don't try any tricks, boy. We both know that"
 		    echo "there is no map here, now don't we?\", he asks. He doesn't seem too sure about"
 		    echo "it himself."
@@ -795,7 +789,7 @@ talkhelp() {
 		    restart
 		fi
 	    elif [[ "$2" == "naked" || "$2" == "woman" ]]; then
-		if [[ "$hbr" != "foul" ]]; then
+		if [[ "$current_place" != "foul" ]]; then
 		    echo "Thorin glances around. \"Whoa, where is she? Where's this woman you're talking"
 		    echo "about?\" he says. You are forced to disappoint him."
 		else
@@ -804,7 +798,7 @@ talkhelp() {
 		    echo "handle of his axe, as if to make it clear that you had better leave it at that."
 		fi
 	    else
-		case "$hbr" in
+		case "$current_place" in
 		    "clearing" )
 			echo "Thorin gets a serious look on his face. \"Don't push your luck, kid!\", he says."
 			;;
@@ -830,10 +824,10 @@ talkhelp() {
 	    fi
 	    ;;
 	"naked" | "woman" )
-	    if [[ "$hbr" != "foul" ]]; then
+	    if [[ "$current_place" != "foul" ]]; then
 		echo "You can't see her here."
 	    elif [[ "$2" == "map" ]]; then
-		if [[ "$hb3" != "foul" && "$hb3" != "me" ]]; then
+		if [[ "$map" != "foul" && "$map" != "me" ]]; then
 		    echo "She doesn't seem to understand what you are referring to."
 		else
 		    echo "She looks at your map and laughs heartily. You seem to have made her day."
@@ -852,16 +846,12 @@ talkhelp() {
 }
 
 wait() {
-    if [[ "$hbr" == "clearing" && "$hbs" != "YES" ]]; then
+    if [[ "$current_place" == "clearing" && ! "$trolls_are_stoned" ]]; then
 	echo "A new day dawns. The trolls seem rather surprised, and rigid with fear."
-	hbs="YES"
+	trolls_are_stoned="YES"
     else
 	echo "Time passes..."
     fi
-}
-
-x() {
-    examine $1 $2
 }
 
 parse() {
@@ -871,7 +861,7 @@ parse() {
 	    shift;
 	    ask "$@";
 	    ;;
-	"clue" )
+	"clue" | "hint" )
 	    clue;
 	    ;;
 	"cut" )
@@ -893,32 +883,19 @@ parse() {
 	    shift;
 	    enter "$@";
 	    ;;
-	"examine" )
+	"x" | "examine" )
 	    shift;
-	    examine "$@";
-	    ;;
-	"get" )
-	    shift;
-	    get "$@";
+	    examine $1 $2;
 	    ;;
 	"go" )
 	    shift;
 	    go "$@";
 	    ;;
-	"hint" )
-	    shift;
-	    hint "$@";
-	    ;;
 	"i" | "inventor" | "inventory" )
 	    inventory;
 	    ;;
 	"kill" )
-	    shift;
-	    kill "$@";
-	    ;;
-	"load" )
-	    shift;
-	    load "$@";
+	    kill;
 	    ;;
 	"l" | "look" )
 	    look;
@@ -932,7 +909,7 @@ parse() {
 	"restart" )
 	    restart;
 	    ;;
-	"restore" )
+	"restore" | "load" )
 	    shift;
 	    restore "$@";
 	    ;;
@@ -947,7 +924,7 @@ parse() {
 	    shift;
 	    show "$@";
 	    ;;
-	"take" )
+	"take" | "get" )
 	    shift;
 	    take "$@";
 	    ;;
@@ -961,13 +938,11 @@ parse() {
 	"w" )
 	    go "west";
 	    ;;
-	"x" )
-	    shift;
-	    examine $1 $2;
+	"" )
+	    look;
 	    ;;
 	* )
-	    look;
-	    # TODO make some sentence for unknown command
+	    echo "I don't understand that sentence."
 	    ;;
     esac
 }
@@ -976,7 +951,7 @@ parse() {
 if [[ "$1" ]]; then
     case "$1" in
 	-v | --version)
-	    echo "hobbit v1.0"
+	    echo "hobbit v1.0.1"
 	    echo "Copyright 1993, 2001 Fredrik Ramsberg, Johan Berntsson (Milbus"
 	    echo " Software) - original code"
 	    echo "Copyright 2015 Konstantin Shakhnov - BASH port"
