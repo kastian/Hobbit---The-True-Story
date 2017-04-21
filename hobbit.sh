@@ -5,6 +5,7 @@
 # Copyright 1993, 2001 Fredrik Ramsberg, Johan Berntsson
 # Copyright 2015 Konstantin Shakhnov
 
+
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -30,6 +31,15 @@
 # >                                                Fredrik Ramsberg
 
 ########################################################################
+
+
+# v.1.0.3 (Minor modifications by R.H. 2017)
+#	Minor spelling corrections
+
+# v.1.0.2 (Minor modifications by R.H. 2017)
+#	Added prompt
+#	Added "PRESS ANY KEY TO CONTINUE" where applicable
+#	Removed commands to clear the screen between turns
 
 # v.1.0.1
 #	Rename variables to more understangable names
@@ -66,16 +76,17 @@ cut() {
 	    if [[ "$current_place" != "den" ]]; then
 		echo "There are no cigars around."
 	    elif [[ "$sword" != "me" ]]; then
-		echo "You havn't got anything to cut with."
+		echo "You haven't got anything to cut with."
 	    else
 		echo "You run towards the mighty dragon and cut off his cigar. The dragon:"
-		echo "exclaims, \"Hey, what are you doing!\". You explain that the cigar will"
+		echo "exclaims, \"Hey, what are you doing!\" You explain that the cigar will"
 		echo "be easier to smoke now, and after some experimenting, Smaug agrees with you."
 		echo "He trades your sword for a treasure and offers you transport to Rivendell."
 		treasure="me"
 		current_place="rivendell"
 		sword="den"
 		echo ""
+		echo "Press any key to continue . . ."
 		read -sn 1 # pause
 		look
 	    fi
@@ -248,7 +259,7 @@ examine() {
 		    echo "provided that Smaug gets to keep your body."
 		    ;;
 		"woods" )
-		    echo "Thorin says \"We're lost! Abandon all hope. We'll never get out of here alive!\"."
+		    echo "Thorin says \"We're lost! Abandon all hope. We'll never get out of here alive!\""
 		    ;;
 		"clearing")
 		    if [[ "$trolls_are_stoned" ]]; then
@@ -258,7 +269,7 @@ examine() {
 		    fi
 		    ;;
 		"cave" )
-		    echo "Thorin is writing a song. I shall call it \"Let's roll another one\", he remarks."
+		    echo "Thorin is writing a song. \"I shall call it 'Let's Roll Another One',\" he remarks."
 		    ;;
 		esac
 	    ;;
@@ -329,6 +340,7 @@ go() {
 		raft="nil"
 		current_place="den"
 		echo ""
+		echo "Press any key to continue . . ."
 		read -sn 1 # pause
 		look
 		echo "Thorin, whom you haven't seen since you were in the forest together, enters"
@@ -378,14 +390,15 @@ go() {
 		    look
 		    echo ""
 		    echo "As you enter your home again, Gandalf leaps to his feet. He comes forward, as"
-		    echo "if to greet and congratulate you, but instead he asks, \"Did you bring any"
-		    echo "tobacco?\". You decide to do what you should have done a long time ago. You"
+		    echo "if to greet and congratulate you, but instead he asks, \"did you bring any"
+		    echo "tobacco?\" You decide to do what you should have done a long time ago. You"
 		    echo "show the old wizard to the door, and kindly ask him to leave. Thorin follows"
 		    echo "Gandalf out through the door."
 		    echo ""
 		    echo "Without any wizards or dwarves pestering you all the time, your life gets very"
 		    echo "pleasant, and with the treasure it stays that way. You have won!!!"
 		    echo ""
+		    echo "PRESS ANY KEY TO EXIT"
 		    read -sn 1 # pause
 		    exit 0
 		fi
@@ -517,7 +530,7 @@ look() {
 	    ;;
 	"home" )
 	    echo "Tunnel Like Hall"
-	    echo "You are in your comfortable tunnel like hall. Infact, it's just a dirty hole in"
+	    echo "You are in your comfortable tunnel like hall. In fact, it's just a dirty hole in"
 	    echo "the ground, but to you it's home. Gandalf is working on a nasty spell. There"
 	    echo "is a round, green door set in the eastern wall."
 	    ;;
@@ -580,6 +593,8 @@ restart() {
     echo ""
 
     look
+    echo
+    echo -n ">"
 }
 
 restore() {
@@ -732,19 +747,19 @@ talkhelp() {
 		echo "You can't see him here."
 	    elif [[ "$2" == "map" ]]; then
 		if [[ "$map" != "gandalf" ]]; then
-		    echo "Gandalf yells, \"I already gave it to you, didn't I!!!\"."
+		    echo "Gandalf yells, \"I already gave it to you, didn't I!!!\""
 		else
 		    echo "\"Oh, that map. There is absolutely nothing special about it at all. I guess"
-		    echo "you could have it, if you want it.\", Gandalf declares and hands you the map. "
+		    echo "you could have it, if you want it,\" Gandalf declares and hands you the map. "
 		    map="me"
 		fi
 	    elif [[ "$2" == "spell" ]]; then
-		echo "\"This will be a great spell. I shall name it 'HOBOFF', no doubt.\", Gandalf"
+		echo "\"This will be a great spell. I shall name it 'HOBOFF', no doubt,\" Gandalf"
 		echo "chuckles."
 	    elif [[ "$2" == "hoboff" ]]; then
 		echo "Gandalf gives you a mean smile, showing all his teeth. \"Any Hobbit of my"
-		echo "choice will be turned into a pile of dirt.\", he laughs, \"Only a few minor"
-		echo "adjustments left, and it will produce a great fertilizer.\". His eyes open"
+		echo "choice will be turned into a pile of dirt,\" he laughs, \"Only a few minor"
+		echo "adjustments left, and it will produce a great fertilizer.\" His eyes open"
 		echo "wide as he reaches the end of the sentence. He then looks at you for a good"
 		echo "fifteen seconds before he slowly turns away."
 	    elif [[ "$2" == "thorin" ]]; then
@@ -752,7 +767,7 @@ talkhelp() {
 		echo "he wasn't himself before, and now he is. Or maybe we haven't even seen his real"
 		echo "self. Let's talk about something else, shall we?\" says Gandalf and looks tired."
 	    else
-		echo "\"Yes, that's probably so\", he says."
+		echo "\"Yes, that's probably so,\" he says."
 	    fi
 	    ;;
 	"elrond" )
@@ -760,16 +775,16 @@ talkhelp() {
 		echo "You can't see him here."
 	    elif [[ "$2" == "map" ]]; then
 		if [[ "$map" != "rivendell" && "$map" != "me" ]]; then
-		    echo "\"What map are you talking about, you little prat? You must be delirious!\","
+		    echo "\"What map are you talking about, you little prat? You must be delirious!\""
 		    echo "Elrond snarls. He slaps you in the face."
 		else
 		    echo "\"That's a fine map you've got there. We wouldn't want anything to HAPPEN to it,"
-		    echo "now would we?\", Elrond hisses. He continues; \"Whatever you do, don't show it to"
-		    echo "that crazy dwarf!\"."
+		    echo "now would we?\" Elrond hisses. He continues; \"Whatever you do, don't show it to"
+		    echo "that crazy dwarf!\""
 		fi
 	    elif [[ "$2" == "plans" ]]; then
-		echo "\"They are top secret. If you reveal anything you're dead meat, pipsqueak!\","
-		echo "Elrond whispers. He look as though he meant it."
+		echo "\"They are top secret. If you reveal anything you're dead meat, pipsqueak!\""
+		echo "Elrond whispers. He looks as though he meant it."
 	    else
 		echo "Elrond laughs at your silly question. He pats your head."
 	    fi
@@ -778,11 +793,11 @@ talkhelp() {
 	    if [[ "$2" == "map" ]]; then
 		if [[ "$map" != "$current_place" &&  "$map" != "me" ]]; then
 		    echo "Thorin eyes you suspiciously. \"Don't try any tricks, boy. We both know that"
-		    echo "there is no map here, now don't we?\", he asks. He doesn't seem too sure about"
+		    echo "there is no map here, now don't we?\" he asks. He doesn't seem too sure about"
 		    echo "it himself."
 		else
 		    echo "Thorin takes a quick look at the map. His eyes widen in rage as he reaches for"
-		    echo "his battle axe. \"It was you all the time, wasn't it?!\", he cries out. With one"
+		    echo "his battle axe. \"It was you all the time, wasn't it?!\" he cries out. With one"
 		    echo "well placed blow he cleaves your skull. All is dark..."
 		    echo""
 		    read -sn 1 # pause
@@ -793,32 +808,32 @@ talkhelp() {
 		    echo "Thorin glances around. \"Whoa, where is she? Where's this woman you're talking"
 		    echo "about?\" he says. You are forced to disappoint him."
 		else
-		    echo "Thorin looks embarrased. \"I'd rather not talk about it. She's...She's...Never"
+		    echo "Thorin looks embarrassed. \"I'd rather not talk about it. She's...She's...Never"
 		    echo "mind, it's none of your business anyway,\" he says. He briefly touches the"
 		    echo "handle of his axe, as if to make it clear that you had better leave it at that."
 		fi
 	    else
 		case "$current_place" in
 		    "clearing" )
-			echo "Thorin gets a serious look on his face. \"Don't push your luck, kid!\", he says."
+			echo "Thorin gets a serious look on his face. \"Don't push your luck, kid!\" he says."
 			;;
 		    "woods" )
-			echo "\"Have you ever tried picking up your teeth with broken fingers?\",Thorin replies."
+			echo "\"Have you ever tried picking up your teeth with broken fingers?\" Thorin replies."
 			;;
 		    "cave" )
-			echo "\"I'm tired of killing for money. Let's go home!\", Thorin sighs."
+			echo "\"I'm tired of killing for money. Let's go home!\" Thorin sighs."
 			;;
 		    "rivendell" )
 			echo "Thorin is too absorbed by Elronds plans to pay attention."
 			;;
 		    "den" )
-			echo "\"Hell, this is a fortune!\", Thorin states as he walks around the cave."
+			echo "\"Hell, this is a fortune!\" Thorin states as he walks around the cave."
 			;;
 		    "foul" )
-			echo "Thorin sees nothing except woman."
+			echo "Thorin sees nothing except the woman."
 			;;
 		    "home" )
-			echo "\"Did your mom ever talk to you about death?\", Thorin asks you."
+			echo "\"Did your mom ever talk to you about death?\" Thorin asks you."
 			;;
 		esac
 	    fi
@@ -855,94 +870,164 @@ wait() {
 }
 
 parse() {
-    clear
+#    clear
     case "$1" in
 	"ask" )
 	    shift;
 	    ask "$@";
+	    echo
+		echo -n ">"
 	    ;;
 	"clue" | "hint" )
 	    clue;
+	    echo
+		echo -n ">"
 	    ;;
 	"cut" )
 	    shift;
 	    cut "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"drop" )
 	    shift;
 	    drop "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"eat" )
 	    shift;
 	    eat "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"e" )
 	    go "east";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"enter" )
 	    shift;
 	    enter "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"x" | "examine" )
 	    shift;
 	    examine $1 $2;
+	    echo
+		echo -n ">"
+
 	    ;;
 	"go" )
 	    shift;
 	    go "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"i" | "inventor" | "inventory" )
 	    inventory;
+	    echo
+		echo -n ">"
+
 	    ;;
 	"kill" )
 	    kill;
+	    echo
+		echo -n ">"
+
 	    ;;
 	"l" | "look" )
 	    look;
+	    echo
+		echo -n ">"
+
 	    ;;
 	"n" )
 	    go "north";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"q" | "quit" )
 	    exit 0;
 	    ;;
 	"restart" )
 	    restart;
+	    echo
+		echo -n ">"
+
 	    ;;
 	"restore" | "load" )
 	    shift;
 	    restore "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"save" )
 	    shift;
 	    save "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"s" )
 	    go "south";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"show" )
 	    shift;
 	    show "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"take" | "get" )
 	    shift;
 	    take "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"talk" )
 	    shift;
 	    talk "$@";
+	    echo
+		echo -n ">"
+
 	    ;;
-	"wait" )
+	"wait" | "z" )
 	    wait;
+	    echo
+		echo -n ">"
+
 	    ;;
 	"w" )
 	    go "west";
+	    echo
+		echo -n ">"
+
 	    ;;
 	"" )
 	    look;
+	    echo
+		echo -n ">"
+
 	    ;;
 	* )
 	    echo "I don't understand that sentence."
+	    echo
+		echo -n ">"
+
 	    ;;
     esac
 }
@@ -951,7 +1036,7 @@ parse() {
 if [[ "$1" ]]; then
     case "$1" in
 	-v | --version)
-	    echo "hobbit v1.0.1"
+	    echo "hobbit v1.0.3"
 	    echo "Copyright 1993, 2001 Fredrik Ramsberg, Johan Berntsson (Milbus"
 	    echo " Software) - original code"
 	    echo "Copyright 2015 Konstantin Shakhnov - BASH port"
