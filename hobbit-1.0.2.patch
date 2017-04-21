@@ -1,0 +1,222 @@
+7a8
+> 
+33a35,42
+> 
+> 
+> 
+> # v.1.0.2 (Minor modifications by R.H. 2017)
+> #	Added prompt
+> #	Added "PRESS ANY KEY TO CONTINUE" where applicable
+> #	Removed commands to clear the screen between turns
+> 
+69c78
+< 		echo "You havn't got anything to cut with."
+---
+> 		echo "You haven't got anything to cut with."
+72c81
+< 		echo "exclaims, \"Hey, what are you doing!\". You explain that the cigar will"
+---
+> 		echo "exclaims, \"Hey, what are you doing!\" You explain that the cigar will"
+78a88
+> 		echo "Press any key to continue . . ."
+251c261
+< 		    echo "Thorin says \"We're lost! Abandon all hope. We'll never get out of here alive!\"."
+---
+> 		    echo "Thorin says \"We're lost! Abandon all hope. We'll never get out of here alive!\""
+261c271
+< 		    echo "Thorin is writing a song. I shall call it \"Let's roll another one\", he remarks."
+---
+> 		    echo "Thorin is writing a song. \"I shall call it 'Let's Roll Another One',\" he remarks."
+331a342
+> 		echo "PRESS ANY KEY TO CONTINUE."
+381,382c392,393
+< 		    echo "if to greet and congratulate you, but instead he asks, \"Did you bring any"
+< 		    echo "tobacco?\". You decide to do what you should have done a long time ago. You"
+---
+> 		    echo "if to greet and congratulate you, but instead he asks, \"did you bring any"
+> 		    echo "tobacco?\" You decide to do what you should have done a long time ago. You"
+388a400
+> 		    echo "PRESS ANY KEY TO EXIT"
+520c532
+< 	    echo "You are in your comfortable tunnel like hall. Infact, it's just a dirty hole in"
+---
+> 	    echo "You are in your comfortable tunnel like hall. In fact, it's just a dirty hole in"
+582a595,596
+>     echo
+>     echo -n ">"
+735c749
+< 		    echo "Gandalf yells, \"I already gave it to you, didn't I!!!\"."
+---
+> 		    echo "Gandalf yells, \"I already gave it to you, didn't I!!!\""
+738c752
+< 		    echo "you could have it, if you want it.\", Gandalf declares and hands you the map. "
+---
+> 		    echo "you could have it, if you want it,\" Gandalf declares and hands you the map. "
+742c756
+< 		echo "\"This will be a great spell. I shall name it 'HOBOFF', no doubt.\", Gandalf"
+---
+> 		echo "\"This will be a great spell. I shall name it 'HOBOFF', no doubt,\" Gandalf"
+746,747c760,761
+< 		echo "choice will be turned into a pile of dirt.\", he laughs, \"Only a few minor"
+< 		echo "adjustments left, and it will produce a great fertilizer.\". His eyes open"
+---
+> 		echo "choice will be turned into a pile of dirt,\" he laughs, \"Only a few minor"
+> 		echo "adjustments left, and it will produce a great fertilizer.\" His eyes open"
+755c769
+< 		echo "\"Yes, that's probably so\", he says."
+---
+> 		echo "\"Yes, that's probably so,\" he says."
+763c777
+< 		    echo "\"What map are you talking about, you little prat? You must be delirious!\","
+---
+> 		    echo "\"What map are you talking about, you little prat? You must be delirious!\""
+767,768c781,782
+< 		    echo "now would we?\", Elrond hisses. He continues; \"Whatever you do, don't show it to"
+< 		    echo "that crazy dwarf!\"."
+---
+> 		    echo "now would we?\" Elrond hisses. He continues; \"Whatever you do, don't show it to"
+> 		    echo "that crazy dwarf!\""
+771,772c785,786
+< 		echo "\"They are top secret. If you reveal anything you're dead meat, pipsqueak!\","
+< 		echo "Elrond whispers. He look as though he meant it."
+---
+> 		echo "\"They are top secret. If you reveal anything you're dead meat, pipsqueak!\""
+> 		echo "Elrond whispers. He looks as though he meant it."
+781c795
+< 		    echo "there is no map here, now don't we?\", he asks. He doesn't seem too sure about"
+---
+> 		    echo "there is no map here, now don't we?\" he asks. He doesn't seem too sure about"
+785c799
+< 		    echo "his battle axe. \"It was you all the time, wasn't it?!\", he cries out. With one"
+---
+> 		    echo "his battle axe. \"It was you all the time, wasn't it?!\" he cries out. With one"
+803c817
+< 			echo "Thorin gets a serious look on his face. \"Don't push your luck, kid!\", he says."
+---
+> 			echo "Thorin gets a serious look on his face. \"Don't push your luck, kid!\" he says."
+806c820
+< 			echo "\"Have you ever tried picking up your teeth with broken fingers?\",Thorin replies."
+---
+> 			echo "\"Have you ever tried picking up your teeth with broken fingers?\" Thorin replies."
+809c823
+< 			echo "\"I'm tired of killing for money. Let's go home!\", Thorin sighs."
+---
+> 			echo "\"I'm tired of killing for money. Let's go home!\" Thorin sighs."
+815c829
+< 			echo "\"Hell, this is a fortune!\", Thorin states as he walks around the cave."
+---
+> 			echo "\"Hell, this is a fortune!\" Thorin states as he walks around the cave."
+818c832
+< 			echo "Thorin sees nothing except woman."
+---
+> 			echo "Thorin sees nothing except the woman."
+821c835
+< 			echo "\"Did your mom ever talk to you about death?\", Thorin asks you."
+---
+> 			echo "\"Did your mom ever talk to you about death?\" Thorin asks you."
+858c872
+<     clear
+---
+> #    clear
+862a877,878
+> 	    echo
+> 		echo -n ">"
+865a882,883
+> 	    echo
+> 		echo -n ">"
+869a888,890
+> 	    echo
+> 		echo -n ">"
+> 
+873a895,897
+> 	    echo
+> 		echo -n ">"
+> 
+877a902,904
+> 	    echo
+> 		echo -n ">"
+> 
+880a908,910
+> 	    echo
+> 		echo -n ">"
+> 
+884a915,917
+> 	    echo
+> 		echo -n ">"
+> 
+888a922,924
+> 	    echo
+> 		echo -n ">"
+> 
+892a929,931
+> 	    echo
+> 		echo -n ">"
+> 
+895a935,937
+> 	    echo
+> 		echo -n ">"
+> 
+898a941,943
+> 	    echo
+> 		echo -n ">"
+> 
+901a947,949
+> 	    echo
+> 		echo -n ">"
+> 
+904a953,955
+> 	    echo
+> 		echo -n ">"
+> 
+910a962,964
+> 	    echo
+> 		echo -n ">"
+> 
+914a969,971
+> 	    echo
+> 		echo -n ">"
+> 
+918a976,978
+> 	    echo
+> 		echo -n ">"
+> 
+921a982,984
+> 	    echo
+> 		echo -n ">"
+> 
+925a989,991
+> 	    echo
+> 		echo -n ">"
+> 
+929a996,998
+> 	    echo
+> 		echo -n ">"
+> 
+933a1003,1005
+> 	    echo
+> 		echo -n ">"
+> 
+935c1007
+< 	"wait" )
+---
+> 	"wait" | "z" )
+936a1009,1011
+> 	    echo
+> 		echo -n ">"
+> 
+939a1015,1017
+> 	    echo
+> 		echo -n ">"
+> 
+942a1021,1023
+> 	    echo
+> 		echo -n ">"
+> 
+945a1027,1029
+> 	    echo
+> 		echo -n ">"
+> 
+954c1038
+< 	    echo "hobbit v1.0.1"
+---
+> 	    echo "hobbit v1.0.2"
