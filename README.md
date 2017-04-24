@@ -62,6 +62,8 @@ Sample sentences that the parser will recognize:
 
 `wait`
 
+`z` *(Short for wait)*
+
 `save jake1`
 
 `restore jake1`

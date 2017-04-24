@@ -3,8 +3,8 @@
 # hobbit - BASH port of old MS-DOS adventure
 
 # Copyright 1993, 2001 Fredrik Ramsberg, Johan Berntsson
-# Copyright 2015 Konstantin Shakhnov
-
+# Copyright 2015, 2017 Konstantin Shakhnov
+# Copyright 2017 rheadkid
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@
 
 ########################################################################
 
+# v.1.0.4
+#	Minor rewrite prompt section
 
 # v.1.0.3 (Minor modifications by R.H. 2017)
 #	Minor spelling corrections
@@ -43,8 +45,9 @@
 
 # v.1.0.1
 #	Rename variables to more understangable names
-#	Merge some alias functions to originasl
+#	Merge some alias functions to originals
 #	Add real quit.
+
 # v.1.0
 #	Original code fully ported to BASH
 
@@ -593,8 +596,6 @@ restart() {
     echo ""
 
     look
-    echo
-    echo -n ">"
 }
 
 restore() {
@@ -870,164 +871,94 @@ wait() {
 }
 
 parse() {
-#    clear
+    # clear
     case "$1" in
 	"ask" )
 	    shift;
 	    ask "$@";
-	    echo
-		echo -n ">"
 	    ;;
 	"clue" | "hint" )
 	    clue;
-	    echo
-		echo -n ">"
 	    ;;
 	"cut" )
 	    shift;
 	    cut "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"drop" )
 	    shift;
 	    drop "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"eat" )
 	    shift;
 	    eat "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"e" )
 	    go "east";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"enter" )
 	    shift;
 	    enter "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"x" | "examine" )
 	    shift;
 	    examine $1 $2;
-	    echo
-		echo -n ">"
-
 	    ;;
 	"go" )
 	    shift;
 	    go "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"i" | "inventor" | "inventory" )
 	    inventory;
-	    echo
-		echo -n ">"
-
 	    ;;
 	"kill" )
 	    kill;
-	    echo
-		echo -n ">"
-
 	    ;;
 	"l" | "look" )
 	    look;
-	    echo
-		echo -n ">"
-
 	    ;;
 	"n" )
 	    go "north";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"q" | "quit" )
 	    exit 0;
 	    ;;
 	"restart" )
 	    restart;
-	    echo
-		echo -n ">"
-
 	    ;;
 	"restore" | "load" )
 	    shift;
 	    restore "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"save" )
 	    shift;
 	    save "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"s" )
 	    go "south";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"show" )
 	    shift;
 	    show "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"take" | "get" )
 	    shift;
 	    take "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"talk" )
 	    shift;
 	    talk "$@";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"wait" | "z" )
 	    wait;
-	    echo
-		echo -n ">"
-
 	    ;;
 	"w" )
 	    go "west";
-	    echo
-		echo -n ">"
-
 	    ;;
 	"" )
 	    look;
-	    echo
-		echo -n ">"
-
 	    ;;
 	* )
 	    echo "I don't understand that sentence."
-	    echo
-		echo -n ">"
-
 	    ;;
     esac
 }
@@ -1036,10 +967,10 @@ parse() {
 if [[ "$1" ]]; then
     case "$1" in
 	-v | --version)
-	    echo "hobbit v1.0.3"
+	    echo "hobbit v1.0.4"
 	    echo "Copyright 1993, 2001 Fredrik Ramsberg, Johan Berntsson (Milbus"
 	    echo " Software) - original code"
-	    echo "Copyright 2015 Konstantin Shakhnov - BASH port"
+	    echo "Copyright 2015, 2017 Konstantin Shakhnov - BASH port"
 	    echo ""
 	    echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>"
 	    echo "This is free software: you are free to change and redistribute it."
@@ -1069,6 +1000,8 @@ fi
 restart
 ### Run game loop ######################################################
 while (true); do
+    echo
+    echo -n ">"
     read var
     parse $var # NO "" !!!
 done
